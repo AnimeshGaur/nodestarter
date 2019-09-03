@@ -50,8 +50,8 @@ exports.signout = (req, res) => {
 };
 
 exports.requireSignin = expressJwt({
-    secret: process.env.JWT_SECRET,
-    userProperty: 'auth'
+    secret:'xxxxxx' //process.env.JWT_SECRET,
+   , userProperty: 'auth'
 });
 
 exports.forgotPassword = (req, res) => {
