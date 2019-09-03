@@ -1,4 +1,5 @@
 const express = require('express');
+const expressSession = require('express-session')
 const app = express();
 const mongoose = require('mongoose');
 const morgan = require('morgan');
@@ -9,14 +10,19 @@ const fs = require('fs');
 const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
-
+app.use(expressSession(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+  })))
+  
 // db
 // mongodb://kaloraat:dhungel8@ds257054.mlab.com:57054/nodeapi
-// MONGO_URI=mongodb://localhost/nodeapi
+//MONGO_URI=mongodb://localhost/nodeapi
 // mongodb+srv://kaloraat_admin:kkkkkk9@nodeapi-pbn7j.mongodb.net/nodeapi?retryWrites=truenodeAPI?retryWrites=true
 // mongodb+srv://robertchou_admin:Aeiourc2491@nodeapi-p2o93.mongodb.net/nodeapi?retryWrites=true&w=majority
-mongoose
-    .connect(process.env.MONGO_URI, {
+mongoose.
+    connect('mongodb://120.0.0.1:27017', {
         useNewUrlParser: true
     })
     .then(() => console.log('DB Connected'));
@@ -51,11 +57,12 @@ app.use(cors());
 app.use('/api', postRoutes);
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({ error: 'Unauthorized!' });
     }
 });
+
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
